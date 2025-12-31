@@ -1,0 +1,309 @@
+{
+  "customerPersona": {
+    "id": "customer-1",
+    "name": "Elena Sokolova",
+    "role": "Director of Operations and Compliance",
+    "company": "Veloce Retail Solutions",
+    "background": "Elena has over 15 years of experience in retail logistics and regulatory compliance within emerging markets. She specializes in scaling mid-sized retail chains by modernizing their digital infrastructure to meet evolving government fiscal mandates.",
+    "goals": [
+      "Automate fiscal reporting to eliminate manual entry errors and government fines",
+      "Provide a standardized API that third-party vendors and partners can easily integrate into their existing hardware",
+      "Ensure 100% transaction compliance even during frequent local internet outages"
+    ],
+    "painPoints": [
+      "High operational costs and labor hours spent on manual VAT reconciliation and reporting",
+      "The risk of heavy legal penalties or business suspension due to non-compliant receipt issuing",
+      "Difficulty centralizing sales data from diverse hardware setups across multiple store locations"
+    ],
+    "successMetrics": [
+      "Reduction in average transaction registration time to under 300ms",
+      "Zero audit discrepancies reported by the central tax authority in the first fiscal year",
+      "Successful synchronization of 100% of offline-queued transactions within one hour of restored connectivity"
+    ],
+    "communicationStyle": "Direct and data-driven; prefers executive summaries with clear KPIs and high-level milestones, supplemented by detailed technical documentation for her engineering leads.",
+    "technicalLevel": "semi-technical"
+  },
+  "userPersonas": [
+    {
+      "id": "user-1",
+      "name": "Marco Rossi",
+      "role": "Primary User (Manual Entry)",
+      "age": "22-28",
+      "occupation": "Retail Cashier",
+      "background": "Marco works at a busy boutique that is transitioning to digital fiscal reporting but hasn't fully automated their hardware. He is often juggling multiple customers and needs a tool that doesn't slow down the checkout process during peak hours.",
+      "goals": [
+        "Generate a valid fiscal receipt in under 10 seconds",
+        "Easily correct a typo or void a transaction before it is finalized",
+        "Ensure the QR code prints clearly for customers participating in the national tax lottery"
+      ],
+      "frustrations": [
+        "Internet connection drops that halt the checkout line",
+        "Confusing error messages when a transaction fails to register",
+        "Complicated login procedures that time out too quickly"
+      ],
+      "behaviors": [
+        "Uses keyboard shortcuts to navigate the web portal",
+        "Keeps the dashboard open in a browser tab throughout his entire shift",
+        "Manually checks the 'offline queue' status during slow periods to ensure sync"
+      ],
+      "technicalLevel": "beginner",
+      "frequency": "daily",
+      "devices": [
+        "desktop",
+        "tablet"
+      ],
+      "accessibility": [
+        "Needs high contrast UI for visibility under bright store lighting"
+      ]
+    },
+    {
+      "id": "user-2",
+      "name": "Arjun Mehta",
+      "role": "Technical Integration User",
+      "age": "30-40",
+      "occupation": "Senior Backend Developer",
+      "background": "Arjun is a contract developer tasked with integrating the POS-API into an existing custom-built ERP for a medium-sized logistics firm. He values 'developer experience,' comprehensive documentation, and system uptime.",
+      "goals": [
+        "Automate receipt generation via API to eliminate manual entry by staff",
+        "Handle edge cases like refunds and partial voids programmatically",
+        "Ensure high throughput and low latency during peak sales hours"
+      ],
+      "frustrations": [
+        "Lack of a robust sandbox environment for testing edge cases",
+        "Inconsistent error codes that make debugging difficult",
+        "Late notifications about API version changes or maintenance windows"
+      ],
+      "behaviors": [
+        "Thoroughly reads API documentation before writing any code",
+        "Monitors API response times via custom logging scripts",
+        "Uses Postman to manually test endpoints before deployment"
+      ],
+      "technicalLevel": "advanced",
+      "frequency": "occasional",
+      "devices": [
+        "desktop"
+      ],
+      "accessibility": [
+        "Relies on high-quality screen readers for long documentation segments"
+      ]
+    },
+    {
+      "id": "user-3",
+      "name": "Sofia Petrov",
+      "role": "Administrative/Secondary User",
+      "age": "45-55",
+      "occupation": "Small Business Owner",
+      "background": "Sofia owns a local chain of three bakeries. She isn't interested in the technology itself but needs to ensure her business complies with government VAT regulations to avoid heavy fines and legal issues.",
+      "goals": [
+        "Reconcile daily sales totals with the tax authority records",
+        "Void receipts that were created in error by her staff after the fact",
+        "Export clean CSV or PDF reports for her monthly meeting with the accountant"
+      ],
+      "frustrations": [
+        "Discrepancies between physical cash in the drawer and the digital sales log",
+        "Anxiety regarding potential tax audits caused by technical glitches",
+        "Difficulty finding specific past transactions in a crowded sales history"
+      ],
+      "behaviors": [
+        "Reviews the administrative dashboard every evening after closing",
+        "Investigates any 'failed sync' or red-flagged alerts immediately",
+        "Uses her mobile phone to check shop performance while off-site"
+      ],
+      "technicalLevel": "intermediate",
+      "frequency": "daily",
+      "devices": [
+        "desktop",
+        "mobile"
+      ],
+      "accessibility": [
+        "Prefers large fonts and clear green/red status indicators for compliance checks"
+      ]
+    }
+  ],
+  "userStories": [
+    {
+      "id": "POS-001",
+      "personaId": "Arjun Mehta",
+      "epic": "Core Fiscal API Integration",
+      "title": "API Transaction Registration",
+      "story": "As Arjun Mehta, I want to send a POST request with transaction details so that the sale is registered with the tax authority and I receive printable receipt data.",
+      "acceptanceCriteria": [
+        "Given a valid API payload with items and prices, when the request is sent to /api/transactions, then the system returns a 201 Created status.",
+        "Given a successful registration, when the response is received, then it must include a unique fiscal lottery code and a base64 encoded QR image.",
+        "Given an invalid payload (missing VAT rate or negative price), when the request is sent, then the system returns a 400 Bad Request with specific validation error messages."
+      ],
+      "priority": "must-have",
+      "estimatedComplexity": "high",
+      "dependencies": [],
+      "status": "draft"
+    },
+    {
+      "id": "POS-002",
+      "personaId": "Arjun Mehta",
+      "epic": "Core Fiscal API Integration",
+      "title": "API Authentication & Security",
+      "story": "As Arjun Mehta, I want to authenticate my API requests using a secure API key so that only authorized POS hardware can register fiscal transactions.",
+      "acceptanceCriteria": [
+        "Given a request with a valid 'X-API-Key' header, when the endpoint is hit, then the request is processed successfully.",
+        "Given a request with a missing or invalid API key, when the endpoint is hit, then the system returns a 401 Unauthorized response.",
+        "Given a compromised key, when the administrator revokes it, then subsequent requests using that key return 401 immediately."
+      ],
+      "priority": "must-have",
+      "estimatedComplexity": "medium",
+      "dependencies": [],
+      "status": "draft"
+    },
+    {
+      "id": "POS-003",
+      "personaId": "Marco Rossi",
+      "epic": "Web Portal & Manual Operations",
+      "title": "Manual Receipt Entry",
+      "story": "As Marco Rossi, I want to manually input a total transaction amount via the web dashboard so that I can generate a fiscal receipt for walk-in customers without an external ERP.",
+      "acceptanceCriteria": [
+        "Given I am logged into the dashboard, when I click 'New Transaction', then I am presented with a form to enter items, VAT rates, and total price.",
+        "Given the form is filled correctly, when I click 'Generate', then the system registers the sale and displays the fiscal data on screen in under 10 seconds.",
+        "Given a typo in the amount (e.g., letters instead of numbers), when I try to submit, then the interface blocks the submission and highlights the error."
+      ],
+      "priority": "must-have",
+      "estimatedComplexity": "medium",
+      "dependencies": [
+        "POS-001"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-004",
+      "personaId": "Marco Rossi",
+      "epic": "Web Portal & Manual Operations",
+      "title": "Thermal Printing Integration",
+      "story": "As Marco Rossi, I want to trigger a print job immediately after generating a receipt so that I can hand the physical proof of purchase to the customer.",
+      "acceptanceCriteria": [
+        "Given a successfully generated transaction, when the success modal appears, then a 'Print Receipt' button is prominent.",
+        "Given the print button is clicked, when the browser print dialog opens, then the layout is formatted specifically for 80mm thermal paper.",
+        "Given the receipt is printed, when scanned by a smartphone, then the QR code successfully redirects to the tax authority verification page."
+      ],
+      "priority": "must-have",
+      "estimatedComplexity": "medium",
+      "dependencies": [
+        "POS-003"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-005",
+      "personaId": "Arjun Mehta",
+      "epic": "System Resilience & Offline Handling",
+      "title": "Offline Transaction Queuing",
+      "story": "As Arjun Mehta, I want the API to accept transactions even when internet connectivity is lost so that retail operations do not stop during outages.",
+      "acceptanceCriteria": [
+        "Given the tax authority server is unreachable, when a valid API request is sent, then the system queues the transaction locally and returns a '202 Accepted' status with a pending flag.",
+        "Given connectivity is restored, when the system detects the connection, then the queued transactions are processed in chronological order.",
+        "Given a transaction is processed offline, when it is finally synced, then the final fiscal code is updated via a webhook or status callback."
+      ],
+      "priority": "should-have",
+      "estimatedComplexity": "high",
+      "dependencies": [
+        "POS-001"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-006",
+      "personaId": "Sofia Petrov",
+      "epic": "Transaction Management & Corrections",
+      "title": "Void Transaction via Dashboard",
+      "story": "As Sofia Petrov, I want to void a previously issued receipt via the dashboard so that I can correct staff entry errors and adjust tax liabilities.",
+      "acceptanceCriteria": [
+        "Given a list of today's transactions, when I select a receipt and click 'Void', then I am prompted to enter a reason for the cancellation.",
+        "Given the void is confirmed, when the action is processed, then the status updates to 'Voided' and a negative entry is sent to the tax authority.",
+        "Given a receipt is older than the allowed legal void window, when I try to void it, then the system prevents the action and displays a regulatory warning."
+      ],
+      "priority": "should-have",
+      "estimatedComplexity": "medium",
+      "dependencies": [
+        "POS-001"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-007",
+      "personaId": "Arjun Mehta",
+      "epic": "Transaction Management & Corrections",
+      "title": "Programmatic Refund/Void API",
+      "story": "As Arjun Mehta, I want an API endpoint to void transactions programmatically so that our ERP system can automatically handle returns without manual admin intervention.",
+      "acceptanceCriteria": [
+        "Given a PUT request to /api/transactions/{id}/void, when sent with a valid reason code, then the transaction status changes to Voided.",
+        "Given a partial refund is required, when the request specifies specific line items to reverse, then the system generates a credit note linked to the original fiscal ID.",
+        "Given the original transaction ID does not exist, when the void request is sent, then the system returns a 404 Not Found."
+      ],
+      "priority": "should-have",
+      "estimatedComplexity": "high",
+      "dependencies": [
+        "POS-001"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-008",
+      "personaId": "Sofia Petrov",
+      "epic": "Reporting & Compliance",
+      "title": "Daily VAT Reconciliation Report",
+      "story": "As Sofia Petrov, I want to export a daily sales report containing VAT breakdowns so that I can reconcile my internal records with the tax authority's database.",
+      "acceptanceCriteria": [
+        "Given the reporting dashboard, when I select a specific date range, then I can see a summary of Total Sales, Total VAT, and Voided Amounts.",
+        "Given the export function is used, when I choose CSV format, then the file downloads containing columns for Receipt ID, Time, Amount, VAT Rate, and Sync Status.",
+        "Given there are pending offline transactions, when the report is generated, then these items are clearly marked as 'Pending Sync' to avoid reconciliation discrepancies."
+      ],
+      "priority": "must-have",
+      "estimatedComplexity": "medium",
+      "dependencies": [],
+      "status": "draft"
+    },
+    {
+      "id": "POS-009",
+      "personaId": "Sofia Petrov",
+      "epic": "Reporting & Compliance",
+      "title": "Sync Status Dashboard",
+      "story": "As Sofia Petrov, I want to see a visual indicator of the system's connection status with the tax authority so that I know if we are currently compliant.",
+      "acceptanceCriteria": [
+        "Given the main dashboard view, when the system is connected to the tax authority, then a green 'System Operational' badge is visible.",
+        "Given there are errors communicating with the government server, when the dashboard loads, then a red alert banner appears showing the number of unsynced receipts.",
+        "Given I click the alert banner, when the details view opens, then I see a list of specific error codes returned by the tax authority."
+      ],
+      "priority": "could-have",
+      "estimatedComplexity": "low",
+      "dependencies": [
+        "POS-005"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "POS-010",
+      "personaId": "Marco Rossi",
+      "epic": "Web Portal & Manual Operations",
+      "title": "Receipt Search & History",
+      "story": "As Marco Rossi, I want to quickly search for a past receipt by ID or timestamp so that I can reprint it for a customer who lost theirs.",
+      "acceptanceCriteria": [
+        "Given the history tab, when I enter the last 4 digits of a receipt ID, then the relevant transaction appears in the list.",
+        "Given the search results, when I click 'View', then the detailed receipt view is shown.",
+        "Given the detailed view, when I click 'Reprint', then a duplicate copy (marked as 'COPY') is sent to the printer."
+      ],
+      "priority": "should-have",
+      "estimatedComplexity": "low",
+      "dependencies": [
+        "POS-003"
+      ],
+      "status": "draft"
+    }
+  ],
+  "epics": [
+    "Core Fiscal API Integration",
+    "Web Portal & Manual Operations",
+    "Transaction Management & Corrections",
+    "Reporting & Compliance",
+    "System Resilience & Offline Handling"
+  ],
+  "createdAt": 1767198977758,
+  "updatedAt": 1767198977758,
+  "version": 1
+}
