@@ -1,21 +1,50 @@
-export type TransactionStatus = 'SYNCED' | 'PENDING' | 'ERROR' | 'VOID';
+// Core Types based on Tech Specs
 
-export interface Transaction {
+export interface User {
   id: string;
-  external_ref: string;
-  total_amount: number;
-  tax_amount: number;
-  fiscal_code?: string;
-  lottery_code?: string;
-  qr_data: string;
-  status: TransactionStatus;
-  created_at: string;
-  synced_at?: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'merchant' | 'viewer';
 }
 
-export interface DashboardStats {
-  totalSales: number;
-  totalVAT: number;
-  pendingCount: number;
-  transactionCount: number;
+export interface Merchant {
+  id: string;
+  legalName: string;
+  tradeName: string;
+  address: string;
+  vatNumber: string;
+  status: 'active' | 'pending' | 'suspended';
+  apiKey?: string;
+  apiSecret?: string;
+}
+
+export interface Receipt {
+  id: string;
+  merchantId: string;
+  amount: number;
+  currency: string;
+  timestamp: string;
+  items: { name: string; qty: number; price: number }[];
+  status: 'synced' | 'pending' | 'voided';
+  fiscalSignature: string;
+  qrCodeUrl: string;
+}
+
+export interface ApiError {
+  errorCode: string;
+  message: string;
+  correlationId: string;
+  timestamp: string;
+  path: string;
+}
+
+export interface OnboardingState {
+  step: number;
+  legalName: string;
+  tradeName: string;
+  address: string;
+  vatNumber: string;
+  isValidating: boolean;
+  validationError: ApiError | null;
+  generatedCredentials: { clientId: string; clientSecret: string } | null;
 }

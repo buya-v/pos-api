@@ -7,26 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        slate: {
-          800: '#1E293B',
-          900: '#0F172A',
-        },
-        blue: {
-          600: '#2563EB',
-        },
-        green: {
-          600: '#16A34A',
-        },
-        orange: {
-          600: '#EA580C',
-        },
-        red: {
-          600: '#DC2626',
-        },
+        primary: '#0F172A', // Deep Navy
+        accent: '#3B82F6',  // Electric Blue
+        success: '#10B981', // Emerald
+        error: '#EF4444',   // Red
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+      },
+      borderRadius: {
+        md: '6px',
       }
     },
   },

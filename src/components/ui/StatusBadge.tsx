@@ -1,25 +1,25 @@
-import { TransactionStatus } from '@/types';
-import { cn } from '@/lib/utils';
-import { CheckCircle2, Clock, AlertTriangle, XCircle } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 
 interface StatusBadgeProps {
-  status: TransactionStatus;
+  status: 'active' | 'warning' | 'error';
+  label?: string;
 }
 
-export const StatusBadge = ({ status }: StatusBadgeProps) => {
+export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label }) => {
   const config = {
-    SYNCED: { color: 'bg-green-100 text-green-700', icon: CheckCircle2, label: 'Synced' },
-    PENDING: { color: 'bg-orange-100 text-orange-700', icon: Clock, label: 'Pending' },
-    ERROR: { color: 'bg-red-100 text-red-700', icon: AlertTriangle, label: 'Error' },
-    VOID: { color: 'bg-slate-200 text-slate-600', icon: XCircle, label: 'Voided' },
+    active: { color: 'text-success bg-green-50 border-green-200', icon: CheckCircle2, text: 'Active' },
+    warning: { color: 'text-yellow-600 bg-yellow-50 border-yellow-200', icon: AlertTriangle, text: 'Maintenance' },
+    error: { color: 'text-error bg-red-50 border-red-200', icon: XCircle, text: 'Offline' },
   };
 
-  const { color, icon: Icon, label } = config[status];
+  const current = config[status];
+  const Icon = current.icon;
 
   return (
-    <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium", color)}>
-      <Icon className="w-3 h-3 mr-1" />
-      {label}
-    </span>
+    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-medium ${current.color}`}>
+      <Icon className="w-3.5 h-3.5" />
+      {label || current.text}
+    </div>
   );
 };
