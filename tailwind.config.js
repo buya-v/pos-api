@@ -7,25 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          primary: 'var(--brand-primary)',
-        },
-        status: {
-          error: 'var(--status-error)',
-          success: 'var(--status-success)',
-        },
+        primary: '#6366F1', // Indigo
+        success: '#22C55E', // Emerald
+        warning: '#F59E0B', // Amber
+        danger: '#EF4444', // Red
         surface: {
-          bg: 'var(--surface-bg)',
+          base: '#F8FAFC',
+          card: '#FFFFFF'
         }
-      },
-      borderRadius: {
-        sm: 'var(--radius-sm)',
-      },
-      spacing: {
-        md: 'var(--spacing-md)',
-      },
-      fontFamily: {
-        main: ['var(--font-main)', 'system-ui', 'sans-serif'],
       }
     },
   },

@@ -1,30 +1,26 @@
-export interface ProblemDetails {
-  type: string;
-  title: string;
-  status: number;
-  detail: string;
-  instance: string;
-  correlationId: string;
-  timestamp: string;
-  stackTrace?: string; // Only for internal logs, simplified for this demo
-}
+export type TransactionStatus = 'success' | 'warning' | 'danger';
 
 export interface Transaction {
   id: string;
+  merchantId: string;
   amount: number;
   currency: string;
-  status: 'pending' | 'completed' | 'failed';
   timestamp: string;
-  items: { name: string; price: number; vatRate: number }[];
-  qrCodeUrl?: string;
-  fiscalCode?: string;
+  status: TransactionStatus;
+  traceId?: string;
+  items: Array<{ name: string; price: number; quantity: number }>;
 }
 
-export type ServiceStatus = 'operational' | 'degraded' | 'down';
+export interface Merchant {
+  id: string;
+  name: string;
+  email: string;
+  apiKey: string;
+}
 
-export interface HealthCheck {
-  service: 'API_GATEWAY' | 'DB_CONNECTION' | 'TAX_AUTHORITY' | 'VAULT';
-  status: ServiceStatus;
-  latencyMs: number;
-  lastChecked: string;
+export interface ApiError {
+  error: string;
+  code: string;
+  traceId: string;
+  context: string;
 }

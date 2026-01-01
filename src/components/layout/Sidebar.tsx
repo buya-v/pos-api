@@ -1,44 +1,53 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Store, Receipt, Settings, LogOut } from 'lucide-react';
-import { useAuthStore } from '../../store/authStore';
+import { LayoutDashboard, Receipt, Settings, FileText, LogOut } from 'lucide-react';
+import { useStore } from '../../store/useStore';
 
 export const Sidebar: React.FC = () => {
-  const logout = useAuthStore(state => state.logout);
+  const { logout } = useStore();
   
-  const navItemClass = ({ isActive }: { isActive: boolean }) => 
-    `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`;
+  const links = [
+    { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/transactions', icon: Receipt, label: 'Transactions' },
+    { to: '/reports', icon: FileText, label: 'Reports' },
+    { to: '/settings', icon: Settings, label: 'Settings' },
+  ];
 
   return (
-    <aside className="w-64 bg-primary text-white flex flex-col h-screen fixed left-0 top-0">
-      <div className="p-6">
-        <h1 className="text-xl font-bold tracking-tight">POS-API <span className="text-accent">Admin</span></h1>
-        <p className="text-xs text-slate-400 mt-1">Fiscal Middleware v1.1</p>
+    <div className="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
+      <div className="p-6 border-b border-gray-100">
+        <h1 className="text-2xl font-bold text-primary">POS-API</h1>
+        <span className="text-xs text-gray-400">Fiscal Management</span>
       </div>
-      
-      <nav className="flex-1 px-4 space-y-1">
-        <NavLink to="/dashboard" className={navItemClass}>
-          <LayoutDashboard className="w-4 h-4" /> Dashboard
-        </NavLink>
-        <NavLink to="/onboarding" className={navItemClass}>
-          <Store className="w-4 h-4" /> Onboarding
-        </NavLink>
-        <NavLink to="/receipts" className={navItemClass}>
-          <Receipt className="w-4 h-4" /> Receipts
-        </NavLink>
-        <NavLink to="/settings" className={navItemClass}>
-          <Settings className="w-4 h-4" /> Settings
-        </NavLink>
+
+      <nav className="flex-1 p-4 space-y-1">
+        {links.map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            className={({ isActive }) =>
+              `flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+                isActive
+                  ? 'bg-indigo-50 text-primary'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`
+            }
+          >
+            <link.icon className="mr-3 h-5 w-5" />
+            {link.label}
+          </NavLink>
+        ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
-        <button 
+      <div className="p-4 border-t border-gray-200">
+        <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white w-full"
+          className="flex w-full items-center px-4 py-3 text-sm font-medium text-red-600 rounded-md hover:bg-red-50 transition-colors"
         >
-          <LogOut className="w-4 h-4" /> Sign Out
+          <LogOut className="mr-3 h-5 w-5" />
+          Sign Out
         </button>
       </div>
-    </aside>
+    </div>
   );
 };

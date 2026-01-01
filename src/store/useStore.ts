@@ -1,32 +1,58 @@
 import { create } from 'zustand';
-import { LogEntry, Rfc7807Error } from '../types';
+import { Transaction, Merchant } from '../types';
 
 interface AppState {
-  logs: LogEntry[];
-  fiscalStatus: 'connected' | 'disconnected' | 'warning';
-  globalError: Rfc7807Error | null;
-  
-  addLog: (log: Omit<LogEntry, 'id'>) => void;
-  setFiscalStatus: (status: 'connected' | 'disconnected' | 'warning') => void;
-  setGlobalError: (error: Rfc7807Error | null) => void;
-  clearLogs: () => void;
+  currentMerchant: Merchant | null;
+  transactions: Transaction[];
+  isAuthenticated: boolean;
+  login: (merchant: Merchant) => void;
+  logout: () => void;
+  addTransaction: (tx: Transaction) => void;
+  updateTransactionStatus: (id: string, status: Transaction['status'], traceId?: string) => void;
 }
 
+// Mock Initial Data
+const MOCK_MERCHANT: Merchant = {
+  id: 'mer_12345',
+  name: 'Retail Solutions Ltd',
+  email: 'admin@retailsolutions.com',
+  apiKey: 'sk_live_51Mz...'
+};
+
+const MOCK_TRANSACTIONS: Transaction[] = [
+  {
+    id: 'tx_101',
+    merchantId: 'mer_12345',
+    amount: 150.00,
+    currency: 'USD',
+    timestamp: new Date(Date.now() - 3600000).toISOString(),
+    status: 'success',
+    items: [{ name: 'Widget A', price: 150, quantity: 1 }]
+  },
+  {
+    id: 'tx_102',
+    merchantId: 'mer_12345',
+    amount: 45.50,
+    currency: 'USD',
+    timestamp: new Date(Date.now() - 7200000).toISOString(),
+    status: 'danger',
+    traceId: 'ae55-1234-bd99',
+    items: [{ name: 'Service Fee', price: 45.50, quantity: 1 }]
+  }
+];
+
 export const useStore = create<AppState>((set) => ({
-  logs: [],
-  fiscalStatus: 'warning',
-  globalError: null,
-
-  addLog: (log) => set((state) => ({
-    logs: [
-      { ...log, id: Math.random().toString(36).substring(7) },
-      ...state.logs
-    ].slice(0, 50) // Keep last 50 requests per Priority 3
+  currentMerchant: null,
+  transactions: [],
+  isAuthenticated: false,
+  login: (merchant) => set({ currentMerchant: merchant, isAuthenticated: true, transactions: MOCK_TRANSACTIONS }),
+  logout: () => set({ currentMerchant: null, isAuthenticated: false, transactions: [] }),
+  addTransaction: (tx) => set((state) => ({
+    transactions: [tx, ...state.transactions]
   })),
-
-  setFiscalStatus: (status) => set({ fiscalStatus: status }),
-  
-  setGlobalError: (error) => set({ globalError: error }),
-  
-  clearLogs: () => set({ logs: [] })
+  updateTransactionStatus: (id, status, traceId) => set((state) => ({
+    transactions: state.transactions.map(t => 
+      t.id === id ? { ...t, status, traceId } : t
+    )
+  }))
 }));
