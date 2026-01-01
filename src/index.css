@@ -2,11 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
+:root {
+  /* Design Tokens per Spec 3.1 */
+  --brand-primary: #005FB8;
+  --status-error: #D83B01;
+  --status-success: #107C10;
+  --surface-bg: #F3F2F1;
+  --font-main: 'Inter';
+  --spacing-md: 16px;
+  --radius-sm: 4px;
 }
 
-code, pre {
-  font-family: 'JetBrains Mono', monospace;
+body {
+  background-color: var(--surface-bg);
+  font-family: var(--font-main), sans-serif;
+  color: #333;
 }

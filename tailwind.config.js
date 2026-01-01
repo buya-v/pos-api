@@ -8,26 +8,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          primary: '#2563EB', // Blue 600
+          primary: 'var(--brand-primary)',
         },
         status: {
-          success: '#10B981', // Emerald 500
-          error: '#EF4444', // Red 500
-          warning: '#F59E0B', // Amber 500
+          error: 'var(--status-error)',
+          success: 'var(--status-success)',
         },
-        bg: {
-          main: '#F9FAFB', // Gray 50
+        surface: {
+          bg: 'var(--surface-bg)',
         }
       },
-      fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      boxShadow: {
-        card: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-      },
       borderRadius: {
-        md: '6px',
+        sm: 'var(--radius-sm)',
+      },
+      spacing: {
+        md: 'var(--spacing-md)',
+      },
+      fontFamily: {
+        main: ['var(--font-main)', 'system-ui', 'sans-serif'],
       }
     },
   },
