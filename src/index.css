@@ -3,14 +3,10 @@
 @tailwind utilities;
 
 body {
-  @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar for table containers */
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
 }

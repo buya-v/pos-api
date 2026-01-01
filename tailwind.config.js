@@ -7,13 +7,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#0F172A', // Deep Navy
-        accent: '#3B82F6',  // Electric Blue
-        success: '#10B981', // Emerald
-        error: '#EF4444',   // Red
+        brand: {
+          primary: '#2563EB', // Blue 600
+        },
+        status: {
+          success: '#10B981', // Emerald 500
+          error: '#EF4444', // Red 500
+          warning: '#F59E0B', // Amber 500
+        },
+        bg: {
+          main: '#F9FAFB', // Gray 50
+        }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        card: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
       },
       borderRadius: {
         md: '6px',

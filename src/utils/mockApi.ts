@@ -1,30 +1,27 @@
-import { ApiError } from '../types';
+import { ProblemDetails, Transaction } from '../types';
 
-// Simulate API Latency and Standardized Error Responses
-export const simulateApiCall = async <T>(success: boolean, data: T, failureReason?: string): Promise<T> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (success) {
-        resolve(data);
-      } else {
-        const errorResponse: ApiError = {
-          errorCode: failureReason === 'network' ? 'ERR_FISCAL_SYNC_TIMEOUT' : 'ERR_VALIDATION_FAILED',
-          message: failureReason === 'network' ? 'The tax authority server is not responding.' : 'The provided VAT number format is invalid.',
-          correlationId: `req-${Math.random().toString(36).substr(2, 9)}`,
-          timestamp: new Date().toISOString(),
-          path: '/api/v1/simulated-endpoint'
-        };
-        reject(errorResponse);
-      }
-    }, 1200);
-  });
-};
+export const generateUUID = () => crypto.randomUUID();
 
-export const validateVat = async (vat: string): Promise<boolean> => {
-  // Simulate 3rd party check. Only accept VAT starting with "DE"
-  if (!vat.startsWith("DE")) {
-    await simulateApiCall(false, null, 'validation');
-    return false;
-  }
-  return await simulateApiCall(true, true);
-};
+export const generateMockError = (status: number, title: string): ProblemDetails => ({
+  type: `https://pos-api.io/errors/${status === 422 ? 'validation' : 'server-error'}`,
+  title,
+  status,
+  detail: status === 422 
+    ? 'The transaction amount cannot be negative.' 
+    : 'Upstream tax authority service timeout.',
+  instance: `/v1/transactions/${generateUUID()}`,
+  correlationId: `req-${generateUUID().substring(0, 8)}`,
+  timestamp: new Date().toISOString(),
+  stackTrace: `Error: ${title}\n    at FiscalValidator.validate (/src/core/fiscal.ts:42:12)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)`
+});
+
+export const generateTransaction = (amount: number): Transaction => ({
+  id: `tx_${generateUUID().substring(0, 8)}`,
+  amount,
+  currency: 'EUR',
+  status: 'completed',
+  timestamp: new Date().toISOString(),
+  items: [{ name: 'Manual Entry', price: amount, vatRate: 0.2 }],
+  fiscalCode: `FISC-${Math.floor(Math.random() * 999999)}`,
+  qrCodeUrl: '#'
+});
