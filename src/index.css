@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #0052CC;
+  --color-success: #36B37E;
+  --color-error: #FF5630;
+  --color-warning: #FFAB00;
+}
+
 body {
-  @apply bg-surface-base text-gray-900;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }

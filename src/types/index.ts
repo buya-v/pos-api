@@ -1,26 +1,33 @@
-export type TransactionStatus = 'success' | 'warning' | 'danger';
+export type UserRole = 'admin' | 'merchant' | 'cashier';
 
-export interface Transaction {
-  id: string;
-  merchantId: string;
-  amount: number;
-  currency: string;
-  timestamp: string;
-  status: TransactionStatus;
-  traceId?: string;
-  items: Array<{ name: string; price: number; quantity: number }>;
-}
-
-export interface Merchant {
+export interface User {
   id: string;
   name: string;
   email: string;
-  apiKey: string;
+  role: UserRole;
+  merchantId: string;
 }
 
 export interface ApiError {
-  error: string;
   code: string;
-  traceId: string;
-  context: string;
+  message: string;
+  status: number;
+  timestamp: string;
+}
+
+export interface FiscalStatus {
+  isConnected: boolean;
+  lastSync: string;
+  pendingTransactions: number;
+  fiscalId: string;
+  status: 'healthy' | 'degraded' | 'offline';
+}
+
+export interface Transaction {
+  id: string;
+  amount: number;
+  vat: number;
+  timestamp: string;
+  qrCode: string;
+  status: 'synced' | 'pending' | 'voided';
 }

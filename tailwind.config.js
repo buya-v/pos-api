@@ -7,14 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#6366F1', // Indigo
-        success: '#22C55E', // Emerald
-        warning: '#F59E0B', // Amber
-        danger: '#EF4444', // Red
-        surface: {
-          base: '#F8FAFC',
-          card: '#FFFFFF'
-        }
+        primary: '#0052CC',
+        success: '#36B37E',
+        error: '#FF5630',
+        warning: '#FFAB00',
+        surface: '#F4F5F7',
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       }
     },
   },
