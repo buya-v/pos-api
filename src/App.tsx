@@ -1,17 +1,21 @@
 import React from 'react';
 import { useAuthStore } from './store/authStore';
-import { LoginForm } from './components/LoginForm';
-import { Dashboard } from './components/Dashboard';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { AuthGuard } from './components/AuthGuard';
+import { Dashboard } from './pages/Dashboard';
+import { Login } from './pages/Login';
 
-const App: React.FC = () => {
-  const { isAuthenticated } = useAuthStore();
+function App() {
+  const { status } = useAuthStore();
 
   return (
-    <ErrorBoundary>
-      {isAuthenticated ? <Dashboard /> : <LoginForm />}
-    </ErrorBoundary>
+    <AuthGuard>
+      {status === 'AUTHENTICATED' ? (
+        <Dashboard />
+      ) : (
+        <Login />
+      )}
+    </AuthGuard>
   );
-};
+}
 
 export default App;

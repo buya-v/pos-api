@@ -1,84 +1,71 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User, ApiError } from '../types';
-import { mockApi } from '../services/api';
+import { AuthState, User } from '../types';
 
-interface AuthState {
+interface AuthStore {
   user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: ApiError | null;
-  failedAttempts: number;
-  login: (email: string, password: string) => Promise<void>;
+  token: string | null;
+  status: AuthState;
+  failureCount: number;
+  login: (username: string) => Promise<void>;
   logout: () => void;
-  resetError: () => void;
+  resetAuthSession: () => void;
+  incrementFailure: () => void;
 }
 
-export const useAuthStore = create<AuthState>()(
+export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
       user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      error: null,
-      failedAttempts: 0,
-
-      login: async (email, password) => {
-        // P0: Auth Reconstruction - Hard reset on excessive failures
-        if (get().failedAttempts >= 3) {
-          set({ 
-            error: { 
-              code: 'ERR_TOO_MANY_ATTEMPTS', 
-              message: 'Account locked due to excessive failed attempts. Contact support.',
-              status: 403,
-              timestamp: new Date().toISOString()
-            }
-          });
-          return;
-        }
-
-        set({ isLoading: true, error: null });
+      token: null,
+      status: 'IDLE',
+      failureCount: 0,
+      login: async (username: string) => {
         try {
-          const user = await mockApi.login(email, password);
-          set({ 
-            user, 
-            isAuthenticated: true, 
-            isLoading: false, 
-            error: null,
-            failedAttempts: 0 // Reset on success
-          });
-        } catch (err: any) {
-          const newAttempts = get().failedAttempts + 1;
-          const apiError = err as ApiError;
+          // Simulate API Handshake
+          console.group('Auth Handshake');
+          console.log('Initiating login for:', username);
           
-          // P0: Explicit State Wipe on 401
-          if (apiError.status === 401) {
-            localStorage.removeItem('auth-storage');
-          }
-
-          set({ 
-            error: apiError, 
-            isLoading: false, 
-            isAuthenticated: false,
-            failedAttempts: newAttempts
+          await new Promise(resolve => setTimeout(resolve, 800));
+          
+          // Mock successful response
+          const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+          
+          console.log('Token received:', mockToken.substring(0, 10) + '...');
+          
+          set({
+            user: { id: 'u1', username, role: 'ADMIN' },
+            token: mockToken,
+            status: 'AUTHENTICATED',
+            failureCount: 0
           });
+          console.log('State hydrated successfully');
+          console.groupEnd();
+        } catch (e) {
+          console.error('Auth Failure');
+          get().incrementFailure();
+          set({ status: 'ERROR' });
+          console.groupEnd();
         }
       },
-
-      logout: () => {
-        localStorage.removeItem('auth-storage');
-        set({ user: null, isAuthenticated: false, error: null, failedAttempts: 0 });
+      logout: () => set({ user: null, token: null, status: 'IDLE', failureCount: 0 }),
+      incrementFailure: () => {
+        const current = get().failureCount;
+        const newCount = current + 1;
+        if (newCount >= 3) {
+          set({ failureCount: newCount, status: 'LOOP_DETECTED' });
+        } else {
+          set({ failureCount: newCount });
+        }
       },
-
-      resetError: () => set({ error: null })
+      resetAuthSession: () => {
+        console.warn('HARD RESET TRIGGERED: Clearing session storage and state');
+        localStorage.clear();
+        set({ user: null, token: null, status: 'IDLE', failureCount: 0 });
+      }
     }),
     {
-      name: 'auth-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        isAuthenticated: state.isAuthenticated 
-        // Note: We deliberately do not persist errors or loading state
-      }),
+      name: 'pos-auth-storage',
     }
   )
 );

@@ -8,13 +8,15 @@ export default {
     extend: {
       colors: {
         primary: '#0052CC',
-        success: '#36B37E',
-        error: '#FF5630',
-        warning: '#FFAB00',
-        surface: '#F4F5F7',
+        error: '#D32F2F',
+        warning: '#FFA000',
+        success: '#388E3C',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        main: ['Inter', 'sans-serif'],
+      },
+      boxShadow: {
+        active: '0 2px 8px rgba(0,0,0,0.15)',
       }
     },
   },
